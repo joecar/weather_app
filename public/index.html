@@ -17,9 +17,32 @@
           zoom: 8,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        var map = new google.maps.Map(document.getElementById("map_canvas"),
+        var weatherMap = new google.maps.Map(document.getElementById("map_canvas"),
             mapOptions);
+
+		addUserLocationToMap(weatherMap);
       }
+
+		function addUserLocationToMap(weatherMap){
+		var myloc = new google.maps.Marker({
+		    clickable: false,
+		    icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
+		                                                    new google.maps.Size(22,22),
+		                                                    new google.maps.Point(0,18),
+		                                                    new google.maps.Point(11,11)),
+		    shadow: null,
+		    zIndex: 999,
+		    map: weatherMap
+		});
+
+		if (navigator.geolocation) navigator.geolocation.getCurrentPosition(function(pos) {
+		    var me = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+		    myloc.setPosition(me);
+			    weatherMap.setCenter(me);
+		}, function(error) {
+		    // handle error
+		});
+	}
     </script>
   </head>
   <body onload="initialize()">
