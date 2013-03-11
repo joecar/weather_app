@@ -1,51 +1,64 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <style type="text/css">
-      html { height: 100% }
-      body { height: 100%; margin: 0; padding: 0 }
-      #map_canvas { height: 100% }
+        html
+        {
+            height: 100%;
+        }
+        body
+        {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #map_canvas
+        {
+            height: 100%;
+        }
     </style>
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCX0VlWcwn1LwhkcKVnwCOhp7wd-PoktGg&sensor=false">
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCX0VlWcwn1LwhkcKVnwCOhp7wd-PoktGg&sensor=false">
     </script>
     <script type="text/javascript">
-      function initialize() {
-        var mapOptions = {
-          center: new google.maps.LatLng(-34.397, 150.644),
-          zoom: 8,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        var weatherMap = new google.maps.Map(document.getElementById("map_canvas"),
-            mapOptions);
+        function initialize() {
 
-		addUserLocationToMap(weatherMap);
-      }
+            if (navigator.geolocation) navigator.geolocation.getCurrentPosition(function (pos) {
+                var me = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
 
-		function addUserLocationToMap(weatherMap){
-		var myloc = new google.maps.Marker({
-		    clickable: false,
-		    icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
-		                                                    new google.maps.Size(22,22),
-		                                                    new google.maps.Point(0,18),
-		                                                    new google.maps.Point(11,11)),
-		    shadow: null,
-		    zIndex: 999,
-		    map: weatherMap
-		});
+                var mapOptions = {
+                    center: new google.maps.LatLng(me),
+                    zoom: 8,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
 
-		if (navigator.geolocation) navigator.geolocation.getCurrentPosition(function(pos) {
-		    var me = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-		    myloc.setPosition(me);
-			    weatherMap.setCenter(me);
-		}, function(error) {
-		    // handle error
-		});
-	}
+                var weatherMap = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);   
+                weatherMap.setCenter(me);
+
+                addUserLocationToMap(weatherMap);
+
+                function addUserLocationToMap(weatherMap) {
+                    var myloc = new google.maps.Marker({
+                        clickable: false,
+                        icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
+                                                            new google.maps.Size(22, 22),
+                                                            new google.maps.Point(0, 18),
+                                                            new google.maps.Point(11, 11)),
+                        shadow: null,
+                        zIndex: 999,
+                        map: weatherMap
+                    });
+
+					myloc.setPosition(me);
+                };
+            }, function (error) {
+                // handle error
+            });
+        }
     </script>
-  </head>
-  <body onload="initialize()">
-    <div id="map_canvas" style="width:100%; height:100%"></div>
-  </body>
+</head>
+<body onload="initialize()">
+    <div id="map_canvas" style="width: 100%; height: 100%">
+    </div>
+</body>
 </html>
